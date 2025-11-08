@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pranit Mehta — Darkfolio</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+<style>
+  /* === Colour palette & base === */
+  :root{
+    --bg: #090909;          /* page background */
+    --card: #0f0f0f;        /* dark card */
+    --card-2:#161616;       /* alternate card */
+    --muted:#bfbfbf;        /* lower-contrast text */
+    --muted-2:#9b9b9b;
+    --text:#eaeaea;         /* main text */
+    --accent:#ff3b3b;       /* red accent */
+    --accent-soft:#ff6161;
+    --glass: rgba(255,255,255,0.03);
+  }
+  /* Light theme override (toggle) */
+  :root.light {
+    --bg: #f6f6f7;
+    --card: #ffffff;
+    --card-2:#fafafa;
+    --muted:#555555;
+    --muted-2:#666666;
+    --text:#0b0b0b;
+    --accent:#d32f2f;
+    --accent-soft:#e25454;
+    --glass: rgba(0,0,0,0.03);
+  }
+
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial;}
+  .container{max-width:1180px;margin:0 auto;padding:28px;}
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{display:flex;align-items:center;gap:14px}
+  .logo{
+    width:44px;height:44px;border-radius:8px;background:linear-gradient(180deg,#1b1b1b,#0f0f0f);
+    display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.03);
+  }
+  .logo svg{filter:drop-shadow(0 2px 6px rgba(0,0,0,0.6));}
+  h1.site{font-family:Merriweather,serif;font-weight:700;font-size:18px;letter-spacing:0.2px}
+  .subtitle{font-size:12px;color:var(--muted-2)}
+
+  nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-size:14px}
+  nav a:hover{color:var(--accent);}
+
+  .theme-toggle{border:1px solid rgba(255,255,255,0.04);background:var(--card);color:var(--text);padding:8px 10px;border-radius:8px;cursor:pointer}
+
+  /* ---- Hero ---- */
+  .hero{display:grid;grid-template-columns:1fr 480px;gap:36px;align-items:center;margin-top:36px}
+  .hero-title{font-size:44px;line-height:1.02;font-weight:800;font-family:Merriweather,serif}
+  .hero-sub{color:var(--muted);font-size:17px;max-width:60ch;margin-top:18px}
+  .cta{display:inline-block;margin-top:20px;background:var(--accent);color:#000;padding:12px 18px;border-radius:8px;text-decoration:none;font-weight:600}
+  .cta:hover{background:var(--accent-soft)}
+  .ghost{color:var(--muted);margin-left:14px;text-decoration:none;font-size:15px}
+  .meta-grid{display:flex;gap:22px;margin-top:26px;color:var(--muted-2);font-size:13px}
+
+  .hero-pic{
+    width:100%;
+    height:420px;
+    background:linear-gradient(180deg,var(--card),var(--card-2));
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,0.03);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .hero-pic img{
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid var(--accent);
+    box-shadow:0 0 25px rgba(0,0,0,0.6);
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hero-pic img:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 40px rgba(255,59,59,0.5);
+  }
+
+  /* ---- Projects grid ---- */
+  section.projects{margin-top:48px}
+  .projects-head{display:flex;align-items:center;justify-content:space-between}
+  .grid-projects{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:18px}
+  .card{background:var(--card);padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);transition:transform .18s ease,box-shadow .18s ease}
+  .card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(0,0,0,0.55)}
+  .card h3{margin:0;font-size:18px}
+  .meta{color:var(--muted);font-size:13px;margin-top:8px}
+  .desc{color:var(--muted-2);font-size:14px;margin-top:10px}
+  .tag{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;margin-right:8px;border:1px solid rgba(255,255,255,0.03)}
+  .tag.accent{background:rgba(255,59,59,0.07);color:var(--accent);border-color:rgba(255,59,59,0.12)}
+
+  /* ---- HCI cards ---- */
+  .hci-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+  .hci-card{background:linear-gradient(180deg,var(--card),#0b0b0b);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+  .hci-card h4{color:var(--accent);margin:0 0 8px 0;font-size:15px}
+
+  /* ---- Experience / contact ---- */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+  .contact-cta{background:linear-gradient(180deg,var(--card),#070707);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  .contact-cta h3{margin:0}
+  .btn-red{background:var(--accent);color:#000;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block}
+  .btn-outline{border:1px solid rgba(255,255,255,0.06);padding:10px 14px;border-radius:8px;color:var(--muted)}
+
+  footer{margin-top:42px;text-align:center;color:var(--muted);font-size:13px;padding-bottom:40px}
+
+  /* ---- responsive ---- */
+  @media (max-width:980px){
+    .hero{grid-template-columns:1fr;gap:18px}
+    .hero-pic{height:auto;padding:20px}
+    .grid-projects{grid-template-columns:1fr}
+    .hci-grid{grid-template-columns:1fr}
+    .two-col{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <div class="container" id="app">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden>
+          <!-- simple red star-like glyph -->
+          <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#ff3b3b" d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="site">Pranit Mehta</div>
+          <div class="subtitle">Computer Engineering • VJTI • 2023–2027</div>
+        </div>
+      </div>
+
+      <nav>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+        <button id="themeBtn" class="theme-toggle" style="margin-left:12px">Light</button>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="about" aria-labelledby="hero-title">
+      <div>
+        <h2 id="hero-title" class="hero-title">Hi, I’m <span style="color:var(--text);">Pranit Mehta</span></h2>
+        <p class="hero-sub">Computer Engineering student at Veermata Jijabai Technological Institute (VJTI). I build AI-powered image-processing tools and web apps with a focus on HCI and clean visual design.</p>
+
+        <a class="cta" href="#contact">Get in touch</a>
+        <a class="ghost" href="#projects">See portfolio →</a>
+
+        <div class="meta-grid" aria-hidden>
+          <div><div style="font-size:12px;color:var(--muted)">Email</div><div style="font-weight:600;color:var(--text)">pranitm04@gmail.com</div></div>
+          <div><div style="font-size:12px;color:var(--muted)">Phone</div><div style="font-weight:600;color:var(--text)">+91 9920964297</div></div>
+          <div><div style="font-size:12px;color:var(--muted)">Location</div><div style="font-weight:600;color:var(--text)">Mumbai, India</div></div>
+        </div>
+      </div>
+
+      <!-- Updated Hero Image -->
+      <div class="hero-pic" role="img" aria-label="Pranit Mehta photo">
+        <img src="pranit.jpg" alt="Pranit Mehta">
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="projects" id="projects">
+      <div class="projects-head">
+        <h3 style="margin:0;font-size:22px">Selected Projects</h3>
+        <div style="color:var(--muted)">Systems, webapps & multimodal AI prototypes</div>
+      </div>
+
+      <div class="grid-projects">
+        <article class="card">
+          <h3>Vision To Language — Image Report Generator</h3>
+          <div class="meta">Python · OpenCV · GPT-4 · LLaVA · HuggingFace</div>
+          <p class="desc">Automated image-to-text reporting pipeline. Processed 500+ images for denoising, segmentation, OCR & detection. Reduced manual work by ~70% and produced >90% accurate descriptive reports using LLMs.</p>
+          <div style="margin-top:12px">
+            <span class="tag accent">AI · Vision</span>
+            <span class="tag">Automation</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Currency Converter — React & API</h3>
+          <div class="meta">React · Tailwind · REST</div>
+          <p class="desc">Responsive web app with real-time exchange rates for 170+ currencies. Includes swap feature and mobile-first design. Deployed on Vercel.</p>
+          <div style="margin-top:12px">
+            <span class="tag">Frontend</span>
+            <span class="tag accent">API</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>UI Prototyping & HCI Work</h3>
+          <div class="meta">Figma · Prototyping</div>
+          <p class="desc">Prototyped interfaces focusing on GUI requirements, visual hierarchy and rule-of-thirds composition. Performed usability checks and accessibility fixes.</p>
+        </article>
+
+        <article class="card">
+          <h3>Coursework & Side Projects</h3>
+          <div class="meta">DSA · Finance · Web Dev</div>
+          <p class="desc">Certifications from Wharton & Udemy combined with practical projects to build engineering fundamentals and UI/UX competence.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- HCI -->
+    <section style="margin-top:36px;" id="hci">
+      <h3 style="font-size:22px;margin-bottom:10px">HCI & Visual Design</h3>
+      <div class="hci-grid">
+        <div class="hci-card">
+          <h4>GUI Requirements — Functional</h4>
+          <ul style="margin:8px 0 0 18px;color:var(--muted)"><li>Clear affordances & discoverable controls</li><li>Fast feedback & responsiveness</li><li>Accessible keyboard & error handling</li></ul>
+        </div>
+        <div class="hci-card">
+          <h4>Aesthetic & Communicable</h4>
+          <ul style="margin:8px 0 0 18px;color:var(--muted)"><li>Visual hierarchy, consistent typography</li><li>Appropriate whitespace & contrast</li><li>Concise microcopy and indicators</li></ul>
+        </div>
+        <div class="hci-card">
+          <h4>Proportion & Rule of Thirds</h4>
+          <p style="color:var(--muted);margin:8px 0 0">Divide screens into a 3x3 grid and place focal elements near intersections. Maintain a typographic scale for predictable proportions.</p>
+          <div style="margin-top:10px;background:var(--glass);padding:8px;border-radius:8px">
+            <div style="width:100%;height:72px;position:relative">
+              <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:0">
+                <!-- dashed grid -->
+                <div style="border:1px dashed rgba(255,255,255,0.03)"></div>
+                <div style="border:1px dashed rgba(255,255,255,0.03)"></div>
+                <div style="border:1px dashed rgba(255,255,255,0.03)"></div>
+                <div style="border:1px dashed rgba(255,255,255,0.03)"></div>
+                <div style="border:1px dashed rgba(255,255,255,0.03)"></div>
+                <div style="border:1px dashed rgba(255,255,255,0.03)"></div>
+                <div style="border:1px dashed rgba(255,255,255,0.03)"></div>
+                <div style="border:1px dashed rgba(255,255,255,0.03)"></div>
+                <div style="border:1px dashed rgba(255,255,255,0.03)"></div>
+              </div>
+              <div style="position:absolute;left:33%;top:33%;width:8px;height:8px;background:var(--accent);border-radius:50%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience & Contact -->
+    <section id="experience" style="margin-top:36px">
+      <h3 style="font-size:22px">Experience & Leadership</h3>
+      <div class="two-col" style="margin-top:14px">
+        <div class="card">
+          <h4>E-Cell — Event Co-ordinator</h4>
+          <p class="desc">Organised entrepreneurship summits, workshops and networking mixers. Led event coordination across teams and startups.</p>
+        </div>
+        <div class="card">
+          <h4>Pratibimb 2024 — Sponsorship Head</h4>
+          <p class="desc">Raised ₹9.65L+ in sponsorships, managed volunteers and scaled participation by 29% YoY.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" style="margin-top:32px">
+      <div class="contact-cta">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div>
+            <h3 style="margin:0">Let's build something together</h3>
+            <p style="margin:8px 0 0;color:var(--muted)">Email: <a href="mailto:pranitm04@gmail.com" style="color:var(--accent);text-decoration:underline">pranitm04@gmail.com</a> • LinkedIn: <a href="https://linkedin.com/in/pranit-mehta04" style="color:var(--accent);text-decoration:underline" target="_blank" rel="noreferrer">/in/pranit-mehta04</a></p>
+          </div>
+          <div style="display:flex;gap:10px">
+            <a class="btn-red" href="#contact">Contact</a>
+            <a class="btn-outline" href="#">Download CV</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>© 2025 Pranit Mehta. All rights reserved.</footer>
+  </div>
+
+  <script>
+    // theme toggle
+    const btn = document.getElementById("themeBtn");
+    btn.addEventListener("click",()=>{
+      document.documentElement.classList.toggle("light");
+      btn.textContent = document.documentElement.classList.contains("light") ? "Dark" : "Light";
+    });
+  </script>
+</body>
+</html>
